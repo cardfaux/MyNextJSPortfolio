@@ -8,12 +8,23 @@
     "build": "next build",
     "start": "next start"
   },
-  "keywords": ["JamesHagood", "NexJS", "graphQL", "React", "JavaScript", "CSS", "FullStack"],
+  "keywords": [
+    "JamesHagood",
+    "NexJS",
+    "graphQL",
+    "React",
+    "JavaScript",
+    "CSS",
+    "FullStack"
+  ],
   "author": "James Hagood",
   "license": "ISC",
   "dependencies": {
+    "bootstrap": "^4.5.3",
     "next": "^10.0.3",
+    "node-sass": "^5.0.0",
     "react": "^17.0.1",
+    "react-bootstrap": "^1.4.0",
     "react-dom": "^17.0.1"
   }
 }
