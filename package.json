@@ -1,0 +1,19 @@
+{
+  "name": "james-portfolio",
+  "version": "1.0.0",
+  "description": "James Hagood Portfolio Built with NextJS and graphQL",
+  "main": "index.js",
+  "scripts": {
+    "dev": "next",
+    "build": "next build",
+    "start": "next start"
+  },
+  "keywords": ["JamesHagood", "NexJS", "graphQL", "React", "JavaScript", "CSS", "FullStack"],
+  "author": "James Hagood",
+  "license": "ISC",
+  "dependencies": {
+    "next": "^10.0.3",
+    "react": "^17.0.1",
+    "react-dom": "^17.0.1"
+  }
+}
