@@ -1,17 +1,43 @@
 import React from 'react';
+import axios from 'axios';
 
-const apiCall = () => {
-  return new Promise((res, rej) => {
-    setTimeout(() => {
-      res({ testingData: 'just Some Testing Data' });
-    }, 200);
-  });
+import PortfolioCard from '../../components/Portfolios/PortfolioCard';
+
+const fetchPortfolios = () => {
+  const query = `
+    query Portfolios {
+      portfolios {
+        _id,
+        title,
+        company,
+        companyWebsite
+        location
+        jobTitle
+        description
+        startDate
+        endDate
+      }
+    }`;
+  return (
+    axios
+      .post(`${process.env.HOST}/graphql`, { query: query })
+      //  below calling data graph
+      .then(({ data: graph }) => {
+        // returning .data from graph
+        return graph.data;
+      })
+      // getting the .data from graph.data
+      .then((data) => {
+        // returning the .portfolios from the data
+        return data.portfolios;
+      })
+  );
 };
 
-const Portfolios = (props) => {
+// destructred portfolios from the props got from the function at the bottom
+const Portfolios = ({ portfolios }) => {
   return (
     <>
-      {props.testingData}
       <section className='section-title'>
         <div className='px-2'>
           <div className='pt-5 pb-4'>
@@ -21,42 +47,13 @@ const Portfolios = (props) => {
       </section>
       <section className='pb-5'>
         <div className='row'>
-          <div className='col-md-4'>
-            <div className='card subtle-shadow no-border'>
-              <div className='card-body'>
-                <h5 className='card-title'>Card title</h5>
-                <h6 className='card-subtitle mb-2 text-muted'>Card subtitle</h6>
-                <p className='card-text fs-2'>Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+          {portfolios.map((portfolio) => {
+            return (
+              <div key={portfolio._id} className='col-md-4'>
+                <PortfolioCard portfolio={portfolio} />
               </div>
-              <div className='card-footer no-border'>
-                <small className='text-muted'>Last updated 3 mins ago</small>
-              </div>
-            </div>
-          </div>
-          <div className='col-md-4'>
-            <div className='card subtle-shadow no-border'>
-              <div className='card-body'>
-                <h5 className='card-title'>Card title</h5>
-                <h6 className='card-subtitle mb-2 text-muted'>Card subtitle</h6>
-                <p className='card-text fs-2 '>Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-              </div>
-              <div className='card-footer no-border'>
-                <small className='text-muted'>Last updated 3 mins ago</small>
-              </div>
-            </div>
-          </div>
-          <div className='col-md-4'>
-            <div className='card subtle-shadow no-border'>
-              <div className='card-body'>
-                <h5 className='card-title'>Card title</h5>
-                <h6 className='card-subtitle mb-2 text-muted'>Card subtitle</h6>
-                <p className='card-text fs-2 '>Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-              </div>
-              <div className='card-footer no-border'>
-                <small className='text-muted'>Last updated 3 mins ago</small>
-              </div>
-            </div>
-          </div>
+            );
+          })}
         </div>
       </section>
     </>
@@ -64,9 +61,10 @@ const Portfolios = (props) => {
 };
 
 Portfolios.getInitialProps = async () => {
-  console.log('GET INITIAL PROPS PORTFOLIOS');
-  const data = await apiCall();
-  return { ...data };
+  // fetchPortfolios is coming from top of the file
+  const portfolios = await fetchPortfolios();
+  // returning portfolios from this function that is returned from the top of the file
+  return { portfolios };
 };
 
 export default Portfolios;
