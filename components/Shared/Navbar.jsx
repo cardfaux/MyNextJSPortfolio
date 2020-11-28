@@ -1,15 +1,7 @@
 import React from 'react';
-
 import { Navbar, Nav } from 'react-bootstrap';
-import Link from 'next/link';
 
-const AppLink = ({ children, className, href }) => {
-  return (
-    <Link href={href}>
-      <a className={className}>{children}</a>
-    </Link>
-  );
-};
+import { AppLink } from '../../helperFunctions/appLink';
 
 const AppNavbar = () => {
   return (

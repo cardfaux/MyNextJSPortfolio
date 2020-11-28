@@ -19,6 +19,10 @@
     "react/prop-types": 0,
     "jsx-quotes": "off",
     "linebreak-style": "warn",
-    "space-in-parens": "warn"
+    "space-in-parens": "warn",
+    "no-unused-vars": "off",
+    "react/no-unescaped-entities": "off",
+    "template-curly-spacing": ["warn", "always"],
+    "object-curly-spacing": ["warn", "always"]
   }
 }
