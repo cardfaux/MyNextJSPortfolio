@@ -4,7 +4,7 @@
   "description": "James Hagood Portfolio Built with NextJS and graphQL",
   "main": "index.js",
   "scripts": {
-    "dev": "next",
+    "dev": "node server/index.js",
     "build": "next build",
     "start": "next start"
   },
