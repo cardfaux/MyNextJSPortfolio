@@ -4,23 +4,21 @@
     "node": true,
     "es2021": true
   },
-  "extends": [
-    "eslint:recommended",
-    "plugin:react/recommended"
-  ],
+  "extends": ["eslint:recommended", "plugin:react/recommended"],
   "parserOptions": {
     "ecmaFeatures": {
-        "jsx": true
+      "jsx": true
     },
     "ecmaVersion": 12,
     "sourceType": "module"
   },
-  "plugins": [
-    "react",
-    "prettier"
-  ],
+  "plugins": ["react", "prettier"],
   "rules": {
     "semi": ["error", "always"],
-    "quotes": ["error", "single"]
+    "quotes": ["error", "single"],
+    "react/prop-types": 0,
+    "jsx-quotes": "off",
+    "linebreak-style": "warn",
+    "space-in-parens": "warn"
   }
 }
