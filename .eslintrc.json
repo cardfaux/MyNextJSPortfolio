@@ -22,7 +22,7 @@
     "space-in-parens": "warn",
     "no-unused-vars": "off",
     "react/no-unescaped-entities": "off",
-    "template-curly-spacing": ["warn", "always"],
+    "template-curly-spacing": ["off", "always"],
     "object-curly-spacing": ["warn", "always"]
   }
 }
