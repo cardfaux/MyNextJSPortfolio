@@ -24,10 +24,10 @@ const AppNavbar = () => {
             </AppLink>
           </Nav>
           <Nav>
-            <AppLink href='/login' className='mr-3 nav-link'>
+            <AppLink href='/auth/login' className='mr-3 nav-link'>
               Sign In
             </AppLink>
-            <AppLink href='/register' className='mr-3 btn btn-success bg-green-2 bright'>
+            <AppLink href='/auth/register' className='mr-3 btn btn-success bg-green-2 bright'>
               Sign Up
             </AppLink>
           </Nav>
