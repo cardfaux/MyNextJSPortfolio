@@ -1,7 +1,7 @@
 import React from 'react';
 import { Navbar, Nav } from 'react-bootstrap';
 
-import { AppLink } from '../../helperFunctions/appLink';
+import { AppLink } from '../utils/AppLink';
 
 const AppNavbar = () => {
   return (
