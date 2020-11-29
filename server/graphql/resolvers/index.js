@@ -31,7 +31,8 @@ exports.portfolioMutations = {
     const index = data.portfolios.findIndex((portfolio) => {
       return portfolio._id === args.id;
     });
-    const newPortfolio = { _id: args.id, ...args.input };
+    const oldPortfolio = data.portfolios[index];
+    const newPortfolio = { ...oldPortfolio, ...args.input };
     data.portfolios[index] = newPortfolio;
     return newPortfolio;
   },
