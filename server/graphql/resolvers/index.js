@@ -4,11 +4,11 @@ const data = {
   ...portfolioDummyData,
 };
 
-exports.portfolioResolvers = {
+exports.portfolioQueries = {
   hello: () => {
     return 'Hello World!';
   },
-  portfolio: (args) => {
+  portfolio: (root, args) => {
     const portfolio = data.portfolios.find((portfolio) => {
       return portfolio._id === args.id;
     });
@@ -17,7 +17,10 @@ exports.portfolioResolvers = {
   portfolios: () => {
     return data.portfolios;
   },
-  createPortfolio: ({ input }) => {
+};
+
+exports.portfolioMutations = {
+  createPortfolio: (root, { input }) => {
     const _id = require('crypto').randomBytes(10).toString('hex');
     const newPortfolio = { ...input };
     newPortfolio._id = _id;
