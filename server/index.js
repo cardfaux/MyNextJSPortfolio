@@ -105,5 +105,6 @@ app.prepare().then(() => {
     if (error) throw error;
 
     console.log(chalk.bgCyanBright.magentaBright(`> Ready on http://localhost:${port}`));
+    console.log(chalk.bgMagentaBright.cyanBright(`> graphiQL is Ready on http://localhost:${port}/graphql`));
   });
 });

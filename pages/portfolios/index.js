@@ -1,4 +1,6 @@
 import React from 'react';
+import Link from 'next/link';
+
 import axios from 'axios';
 
 import PortfolioCard from '../../components/Portfolios/PortfolioCard';
@@ -50,7 +52,11 @@ const Portfolios = ({ portfolios }) => {
           {portfolios.map((portfolio) => {
             return (
               <div key={portfolio._id} className='col-md-4'>
-                <PortfolioCard portfolio={portfolio} />
+                <Link href='/portfolios/[id]' as={`/portfolios/${portfolio._id}`}>
+                  <a className='card-link'>
+                    <PortfolioCard portfolio={portfolio} />
+                  </a>
+                </Link>
               </div>
             );
           })}
