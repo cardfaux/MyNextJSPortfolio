@@ -16,10 +16,21 @@ const fetchPortfolioById = (id) => {
         endDate
       }
     }`;
-  return axios
-    .post('http://localhost:3000/graphql', { query })
-    .then(({ data: graph }) => graph.data)
-    .then((data) => data.portfolio);
+
+  return (
+    axios
+      .post(`${process.env.HOST}/graphql`, { query: query })
+      //  below calling data graph
+      .then(({ data: graph }) => {
+        // returning .data from graph
+        return graph.data;
+      })
+      // getting the .data from graph.data
+      .then((data) => {
+        // returning the .portfolio from the data
+        return data.portfolio;
+      })
+  );
 };
 
 const PortfolioDetail = ({ portfolio }) => {
