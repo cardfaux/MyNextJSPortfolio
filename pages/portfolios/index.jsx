@@ -1,9 +1,43 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Link from 'next/link';
 
 import axios from 'axios';
 
 import PortfolioCard from '../../components/Portfolios/PortfolioCard';
+
+const graphCreatePortfolio = () => {
+  const query = `
+    mutation CreatePortfolio {
+      createPortfolio(input: {
+        title: "New Job"
+        company: "New Company"
+        companyWebsite: "New Website"
+        location: "New Location"
+        jobTitle: "New Job Title"
+        description: "New Desc"
+        startDate: "12/12/2012"
+        endDate: "14/11/2013"
+      }) {
+        _id,
+        title,
+        company,
+        companyWebsite
+        location
+        jobTitle
+        description
+        startDate
+        endDate
+      }
+    }`;
+  return axios
+    .post(`${process.env.HOST}/graphql`, { query: query })
+    .then(({ data: graph }) => {
+      return graph.data;
+    })
+    .then((data) => {
+      data.createPortfolio;
+    });
+};
 
 const fetchPortfolios = () => {
   const query = `
@@ -37,7 +71,15 @@ const fetchPortfolios = () => {
 };
 
 // destructred portfolios from the props got from the function at the bottom
-const Portfolios = ({ portfolios }) => {
+const Portfolios = ({ data }) => {
+  const [portfolios, setPortfolios] = useState(data.portfolios);
+
+  const createPortfolio = async () => {
+    const newPortfolio = await graphCreatePortfolio();
+    const newPortfolios = [...portfolios, newPortfolio];
+    setPortfolios(newPortfolios);
+  };
+
   return (
     <>
       <section className='section-title'>
@@ -70,7 +112,7 @@ Portfolios.getInitialProps = async () => {
   // fetchPortfolios is coming from top of the file
   const portfolios = await fetchPortfolios();
   // returning portfolios from this function that is returned from the top of the file
-  return { portfolios };
+  return { data: { portfolios } };
 };
 
 export default Portfolios;
