@@ -1,39 +1,17 @@
 import React from 'react';
 import Link from 'next/link';
-import { useQuery, useMutation } from '@apollo/client';
 
-import { GET_PORTFOLIOS } from '../../apollo/queries';
-import { CREATE_PORTFOLIO, UPDATE_PORTFOLIO, DELETE_PORTFOLIO } from '../../apollo/mutations';
+import { useCreatePortfolio, useDeletePortfolio, useGetPortfolios, useUpdatePortfolio } from '../../apollo/actions';
 
 import PortfolioCard from '../../components/Portfolios/PortfolioCard';
 import withApollo from '../../hoc/withApollo';
 import { getDataFromTree } from '@apollo/client/react/ssr';
 
 const Portfolios = () => {
-  const { data } = useQuery(GET_PORTFOLIOS);
-
-  const [updatePortfolio] = useMutation(UPDATE_PORTFOLIO);
-
-  const [deletePortfolio] = useMutation(DELETE_PORTFOLIO, {
-    update(cache, { data: { deletePortfolio } }) {
-      const { portfolios } = cache.readQuery({ query: GET_PORTFOLIOS });
-      const newPortfolios = portfolios.filter((p) => p._id !== deletePortfolio);
-      cache.writeQuery({
-        query: GET_PORTFOLIOS,
-        data: { portfolios: newPortfolios },
-      });
-    },
-  });
-
-  const [createPortfolio] = useMutation(CREATE_PORTFOLIO, {
-    update(cache, { data: { createPortfolio } }) {
-      const { portfolios } = cache.readQuery({ query: GET_PORTFOLIOS });
-      cache.writeQuery({
-        query: GET_PORTFOLIOS,
-        data: { portfolios: [...portfolios, createPortfolio] },
-      });
-    },
-  });
+  const { data } = useGetPortfolios();
+  const [updatePortfolio] = useUpdatePortfolio();
+  const [deletePortfolio] = useDeletePortfolio();
+  const [createPortfolio] = useCreatePortfolio();
 
   const portfolios = (data && data.portfolios) || [];
 
@@ -51,23 +29,21 @@ const Portfolios = () => {
       </section>
       <section className='pb-5'>
         <div className='row'>
-          {portfolios.map((portfolio) => {
-            return (
-              <div key={portfolio._id} className='col-md-4'>
-                <Link href='/portfolios/[id]' as={`/portfolios/${portfolio._id}`}>
-                  <a className='card-link'>
-                    <PortfolioCard portfolio={portfolio} />
-                  </a>
-                </Link>
-                <button className='btn btn-warning' onClick={() => updatePortfolio({ variables: { id: portfolio._id } })}>
-                  Update Portfolio
-                </button>
-                <button onClick={() => deletePortfolio({ variables: { id: portfolio._id } })} className='btn btn-danger'>
-                  Delete Portfolio
-                </button>
-              </div>
-            );
-          })}
+          {portfolios.map((portfolio) => (
+            <div key={portfolio._id} className='col-md-4'>
+              <Link href='/portfolios/[id]' as={`/portfolios/${portfolio._id}`}>
+                <a className='card-link'>
+                  <PortfolioCard portfolio={portfolio} />
+                </a>
+              </Link>
+              <button className='btn btn-warning' onClick={() => updatePortfolio({ variables: { id: portfolio._id } })}>
+                Update Portfolio
+              </button>
+              <button onClick={() => deletePortfolio({ variables: { id: portfolio._id } })} className='btn btn-danger'>
+                Delete Portfolio
+              </button>
+            </div>
+          ))}
         </div>
       </section>
     </>
