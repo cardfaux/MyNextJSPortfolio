@@ -147,6 +147,9 @@ const Portfolios = ({ data }) => {
             <h1>Portfolios</h1>
           </div>
         </div>
+        <button onClick={createPortfolio} className='btn btn-primary'>
+          Create Portfolio
+        </button>
       </section>
       <section className='pb-5'>
         <div className='row'>
