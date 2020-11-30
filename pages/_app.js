@@ -1,6 +1,7 @@
 /* eslint-disable react/prop-types */
 import React from 'react';
 import { ApolloClient, InMemoryCache, ApolloProvider } from '@apollo/client';
+import 'isomorphic-unfetch';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../styles/index.scss';
 

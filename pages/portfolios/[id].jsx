@@ -1,41 +1,28 @@
-import React from 'react';
-import axios from 'axios';
+import React, { useState, useEffect } from 'react';
+import { useQuery, useLazyQuery } from '@apollo/client';
 
-const fetchPortfolioById = (id) => {
-  const query = `
-    query Portfolio($id: ID) {
-      portfolio (id: $id) {
-        _id,
-        title,
-        company,
-        companyWebsite
-        location
-        jobTitle
-        description
-        startDate
-        endDate
-      }
-    }`;
+import { GET_PORTFOLIO } from '../../apollo/queries';
 
-  const variables = { id: id };
+const PortfolioDetail = ({ query }) => {
+  const [portfolio, setPortfolio] = useState(null);
+  const [getPortfolio, { loading, data, error }] = useLazyQuery(GET_PORTFOLIO);
 
-  return (
-    axios
-      .post(`${process.env.HOST}/graphql`, { query: query, variables: variables })
-      //  below calling data graph
-      .then(({ data: graph }) => {
-        // returning .data from graph
-        return graph.data;
-      })
-      // getting the .data from graph.data
-      .then((data) => {
-        // returning the .portfolio from the data
-        return data.portfolio;
-      })
-  );
-};
+  useEffect(() => {
+    getPortfolio({ variables: { id: query.id } });
+  }, []);
 
-const PortfolioDetail = ({ portfolio }) => {
+  if (data && !portfolio) {
+    setPortfolio(data.portfolio);
+  }
+
+  if (loading || !portfolio) {
+    return 'Loading...';
+  }
+
+  if (error) {
+    return `Error! ${error.message}`;
+  }
+
   return (
     <div className='portfolio-detail'>
       <div className='container'>
@@ -78,8 +65,7 @@ const PortfolioDetail = ({ portfolio }) => {
 };
 
 PortfolioDetail.getInitialProps = async ({ query }) => {
-  const portfolio = await fetchPortfolioById(query.id);
-  return { portfolio };
+  return { query };
 };
 
 export default PortfolioDetail;
