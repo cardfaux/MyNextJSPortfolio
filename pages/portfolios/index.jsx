@@ -1,5 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
+import { useQuery, useLazyQuery, useMutation } from '@apollo/client';
+
+import { GET_PORTFOLIOS } from '../../apollo/queries';
+import { CREATE_PORTFOLIO } from '../../apollo/mutations';
 
 import axios from 'axios';
 
@@ -48,80 +52,26 @@ const graphUpdatePortfolio = (id) => {
     .then((data) => data.updatePortfolio);
 };
 
-const graphCreatePortfolio = () => {
-  const query = `
-    mutation CreatePortfolio {
-      createPortfolio(input: {
-        title: "New Job"
-        company: "New Company"
-        companyWebsite: "New Website"
-        location: "New Location"
-        jobTitle: "New Job Title"
-        description: "New Desc"
-        startDate: "12/12/2012"
-        endDate: "14/11/2013"
-      }) {
-        _id,
-        title,
-        company,
-        companyWebsite
-        location
-        jobTitle
-        description
-        startDate
-        endDate
-      }
-    }`;
-  return axios
-    .post(`${process.env.HOST}/graphql`, { query: query })
-    .then(({ data: graph }) => {
-      return graph.data;
-    })
-    .then((data) => {
-      data.createPortfolio;
-    });
-};
+const Portfolios = () => {
+  const [portfolios, setPortfolios] = useState([]);
+  const [getPortfolios, { loading, data, error }] = useLazyQuery(GET_PORTFOLIOS);
+  const [createPortfolio, { data: dataC }] = useMutation(CREATE_PORTFOLIO);
 
-const fetchPortfolios = () => {
-  const query = `
-    query Portfolios {
-      portfolios {
-        _id,
-        title,
-        company,
-        companyWebsite
-        location
-        jobTitle
-        description
-        startDate
-        endDate
-      }
-    }`;
-  return (
-    axios
-      .post(`${process.env.HOST}/graphql`, { query: query })
-      //  below calling data graph
-      .then(({ data: graph }) => {
-        // returning .data from graph
-        return graph.data;
-      })
-      // getting the .data from graph.data
-      .then((data) => {
-        // returning the .portfolios from the data
-        return data.portfolios;
-      })
-  );
-};
+  useEffect(() => {
+    getPortfolios();
+  }, []);
 
-// destructred portfolios from the props got from the function at the bottom
-const Portfolios = ({ data }) => {
-  const [portfolios, setPortfolios] = useState(data.portfolios);
+  if (data && data.portfolios.length > 0 && portfolios.length === 0) {
+    setPortfolios(data.portfolios);
+  }
 
-  const createPortfolio = async () => {
-    const newPortfolio = await graphCreatePortfolio();
-    const newPortfolios = [...portfolios, newPortfolio];
-    setPortfolios(newPortfolios);
-  };
+  if (loading) {
+    return 'Loading...';
+  }
+
+  if (error) {
+    return `Error! ${error.message}`;
+  }
 
   const updatePortfolio = async (id) => {
     const updatedPortfolio = await graphUpdatePortfolio(id);
@@ -174,13 +124,6 @@ const Portfolios = ({ data }) => {
       </section>
     </>
   );
-};
-
-Portfolios.getInitialProps = async () => {
-  // fetchPortfolios is coming from top of the file
-  const portfolios = await fetchPortfolios();
-  // returning portfolios from this function that is returned from the top of the file
-  return { data: { portfolios } };
 };
 
 export default Portfolios;
